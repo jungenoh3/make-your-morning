@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">아침 만들기</string>
+    <string name="short_label_1">"1분 아침 준비 시작"</string>
+    <string name="short_label_10">"10분 아침 준비 시작"</string>
+    <string name="short_label_30">"30분 아침 준비 시작"</string>
+    <string name="short_label_60">"60분 아침 준비 시작"</string>
+    <string name="tip1">아침 만들기 아이콘 그림</string>
+    <string name="tip2">타이머가 켜져있는 동안 핸드폰을 만지면 안된다는 그림</string>
+    <string name="tip3">아침 만들기의 바로가기를 간략화한 그림</string>
+    <string name="tip4">잠금화면에 바로가기가 추가된 그림</string>
+</resources>

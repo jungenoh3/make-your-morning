@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="block_1"
+        android:enabled="true"
+        android:icon="@drawable/makeyourmorning_icon"
+        android:shortcutShortLabel="@string/short_label_1"
+        android:shortcutLongLabel="@string/short_label_1"
+        android:shortcutDisabledMessage="@string/short_label_1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.nochunsam.makeyourmorning"
+            android:targetClass="com.nochunsam.makeyourmorning.pages.main.MainActivity">
+            <extra android:name="minute" android:value="1" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="block_10"
+        android:enabled="true"
+        android:icon="@drawable/makeyourmorning_icon"
+        android:shortcutShortLabel="@string/short_label_10"
+        android:shortcutLongLabel="@string/short_label_10"
+        android:shortcutDisabledMessage="@string/short_label_10">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.nochunsam.makeyourmorning"
+            android:targetClass="com.nochunsam.makeyourmorning.pages.main.MainActivity">
+            <extra android:name="minute" android:value="10" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="block_30"
+        android:enabled="true"
+        android:icon="@drawable/makeyourmorning_icon"
+        android:shortcutShortLabel="@string/short_label_30"
+        android:shortcutLongLabel="@string/short_label_30"
+        android:shortcutDisabledMessage="@string/short_label_30">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.nochunsam.makeyourmorning"
+            android:targetClass="com.nochunsam.makeyourmorning.pages.main.MainActivity">
+            <extra android:name="minute" android:value="30" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="block_60"
+        android:enabled="true"
+        android:icon="@drawable/makeyourmorning_icon"
+        android:shortcutShortLabel="@string/short_label_60"
+        android:shortcutLongLabel="@string/short_label_60"
+        android:shortcutDisabledMessage="@string/short_label_60">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.nochunsam.makeyourmorning"
+            android:targetClass="com.nochunsam.makeyourmorning.pages.main.MainActivity">
+            <extra android:name="minute" android:value="60" />
+        </intent>
+    </shortcut>
+</shortcuts>
