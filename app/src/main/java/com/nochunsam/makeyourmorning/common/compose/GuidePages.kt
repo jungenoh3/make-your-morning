@@ -5,18 +5,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.Button
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import com.nochunsam.makeyourmorning.utilities.pref.FirstOpenManager
 import kotlinx.coroutines.launch
 import com.nochunsam.makeyourmorning.R
 
@@ -63,12 +57,8 @@ fun FourthPage() {
 }
 
 @Composable
-fun FifthPageWithNavController (navController: NavHostController) {
-    val context = LocalContext.current
+fun FifthPageWithNavController (navigateToMain: () -> Unit) {
     val scope = rememberCoroutineScope()
-    val manager = remember { FirstOpenManager(context) }
-
-    val isFirstOpen by manager.isFirstOpen.collectAsState(initial = true)
 
     CustomColumn (
         paddingValues = PaddingValues(30.dp)
@@ -77,16 +67,13 @@ fun FifthPageWithNavController (navController: NavHostController) {
         Box(modifier = Modifier.height(20.dp))
         Button(onClick = {
             scope.launch {
-                if (isFirstOpen) {
-                    manager.setFirstOpen()   // false로 변경
-                }
-                navController.navigate("main") {
-                    popUpTo("main") {inclusive = true}
-                }
+                navigateToMain()
             }
         }) {
             Text("시작합시다!", fontSize = 25.sp)
         }
+        Box(modifier = Modifier.height(20.dp))
+        Text("사용 설명은 설정 > 사용 설명에서 다시 볼 수 있어요!")
     }
 }
 

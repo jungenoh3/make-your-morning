@@ -1,26 +1,28 @@
 package com.nochunsam.makeyourmorning.pages.main
 
+import androidx.compose.runtime.getValue
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.nochunsam.makeyourmorning.common.data.BlockTime
-import com.nochunsam.makeyourmorning.common.data.DayCount
 import com.nochunsam.makeyourmorning.common.compose.NavigationGraph
 import com.nochunsam.makeyourmorning.ui.theme.MakeYourMorningTheme
 import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
-import com.nochunsam.makeyourmorning.utilities.database.AppDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.nochunsam.makeyourmorning.utilities.pref.PrefViewModel
 import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
     private var userLeaving = false
     private var backPressed = false
+    private val viewModel: PrefViewModel by viewModels()
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
@@ -38,17 +40,14 @@ class MainActivity : ComponentActivity() {
         super.onStop()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         handleShortcutIntent(intent)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val dao = AppDatabase.getInstance(this@MainActivity)?.dayCountDao()
-            if (dao?.get() == null) {
-                dao?.insert(DayCount(id = 1, count = 0))
-            }
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.isLoading.value
         }
 
         onBackPressedDispatcher.addCallback(
@@ -65,7 +64,15 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             setContent {
                 MakeYourMorningTheme {
-                    NavigationGraph(startDestination = "main")
+                    val startDestination by viewModel.startDestination.collectAsState()
+                    // 목적지가 결정됐을 때 graph 생성
+                    if (startDestination != null) {
+                        println("최종 startDestination: $startDestination")
+                        NavigationGraph(
+                            startDestination = startDestination!!,
+                            setFirstOpen = { viewModel.setIntroFinished() }
+                        )
+                    }
                 }
             }
         }
