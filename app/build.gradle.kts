@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.compose")
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -55,6 +57,10 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("com.google.accompanist:accompanist-pager:0.34.0")

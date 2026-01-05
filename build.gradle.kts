@@ -5,6 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" // this version matches your Kotlin version
     id("com.google.devtools.ksp") version "2.0.0-1.0.23" apply false
     id("com.android.library") version "8.1.4" apply false
+
+    id("com.google.gms.google-services") version "4.4.4" apply false
 }
 
 composeCompiler {
