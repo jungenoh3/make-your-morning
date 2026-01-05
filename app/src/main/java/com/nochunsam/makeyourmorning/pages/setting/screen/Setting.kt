@@ -24,21 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.nochunsam.makeyourmorning.common.compose.CustomColumn
 import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Setting(
-    rootNavController: NavController
+    onNavigateToTutorial: () -> Unit,
+    onBack: () -> Boolean
 ) {
     val context = LocalContext.current
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(title = { Text("환경 설정") }, actions = {
                 IconButton(onClick = {
-                    rootNavController.popBackStack()
+                    onBack()
                 }) {
                     Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기 버튼")
                 }
@@ -64,7 +64,7 @@ fun Setting(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { rootNavController.navigate("tutorial") }
+                        .clickable { onNavigateToTutorial() }
                         .padding(vertical = 15.dp, horizontal = 20.dp)
                 ) {
                     Text("사용 설명", fontSize = 15.sp)
