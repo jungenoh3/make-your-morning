@@ -27,7 +27,6 @@ object FocusBlockingManager {
     private var totalSeconds: Int = 0
 
     var currentBlockId: String? = null
-        private set
 
     fun startBlockingFor(blockId: String, minutes: Int) {
         // 기존에 존재하는 job 취소
