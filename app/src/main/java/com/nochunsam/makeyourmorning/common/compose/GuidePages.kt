@@ -1,4 +1,4 @@
-package com.nochunsam.makeyourmorning.pages.tutorial.compose
+package com.nochunsam.makeyourmorning.common.compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,8 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.nochunsam.makeyourmorning.common.compose.CustomColumn
-import com.nochunsam.makeyourmorning.common.compose.CustomTutorialPage
 import com.nochunsam.makeyourmorning.utilities.pref.FirstOpenManager
 import kotlinx.coroutines.launch
 import com.nochunsam.makeyourmorning.R
@@ -65,7 +63,7 @@ fun FourthPage() {
 }
 
 @Composable
-fun FifthPage (navController: NavHostController) {
+fun FifthPageWithNavController (navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val manager = remember { FirstOpenManager(context) }
@@ -89,5 +87,16 @@ fun FifthPage (navController: NavHostController) {
         }) {
             Text("시작합시다!", fontSize = 25.sp)
         }
+    }
+}
+
+@Composable
+fun FifthPageWithoutNavController () {
+    CustomColumn (
+        paddingValues = PaddingValues(30.dp)
+    ) {
+        Text(text = "하루를 만든 것만으로도\n우린 충분히 멋져요!", fontSize = 30.sp, textAlign = TextAlign.Center, lineHeight = 35.sp)
+        Box(modifier = Modifier.height(20.dp))
+        Text(text = "오늘도 응원할게요!")
     }
 }

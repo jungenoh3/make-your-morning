@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.nochunsam.makeyourmorning.common.data.BlockTime
 import com.nochunsam.makeyourmorning.pages.main.compose.CircularTimerPicker
 import com.nochunsam.makeyourmorning.pages.main.compose.CountdownCircularTimer
@@ -47,7 +46,7 @@ import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermissi
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("LaunchDuringComposition")
 @Composable
-fun MainScreen(rootNavController: NavHostController) {
+fun MainScreen(onNavigateToSettings: () -> Unit) {
     // 필요 변수 선언
     val context = LocalContext.current
     var selectedMinutes by remember { mutableIntStateOf(10) }
@@ -80,7 +79,7 @@ fun MainScreen(rootNavController: NavHostController) {
             CenterAlignedTopAppBar(
                 title = { Text("아침을 시작하세요!") },
                 actions = {
-                    IconButton(onClick = { rootNavController.navigate("setting") }) {
+                    IconButton(onClick = { onNavigateToSettings() }) {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Settings"

@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
 import com.nochunsam.makeyourmorning.common.data.BlockTime
 import com.nochunsam.makeyourmorning.common.data.DayCount
-import com.nochunsam.makeyourmorning.pages.main.compose.NavigationGraph
+import com.nochunsam.makeyourmorning.common.compose.NavigationGraph
 import com.nochunsam.makeyourmorning.ui.theme.MakeYourMorningTheme
 import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
