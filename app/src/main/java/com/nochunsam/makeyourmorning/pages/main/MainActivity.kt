@@ -29,18 +29,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         val context = this
-        super.onStop()
-
-        when {
-            backPressed -> {
-                FocusBlockingManager.currentBlockId?.let { AlarmScheduler(context).cancel(it) }
-            }
-            userLeaving -> {
-                FocusBlockingManager.currentBlockId?.let { AlarmScheduler(context).cancel(it) }
-            }
+        if (backPressed || userLeaving){
+            FocusBlockingManager.currentBlockId?.let { AlarmScheduler(context).cancel(it) }
+            FocusBlockingManager.stopBlocking()
         }
         backPressed = false
         userLeaving = false
+        super.onStop()
     }
 
 
