@@ -1,4 +1,4 @@
-package com.nochunsam.makeyourmorning.pages.main.screen
+package com.nochunsam.makeyourmorning.pages.timer.screen
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -35,8 +35,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nochunsam.makeyourmorning.common.data.BlockTime
-import com.nochunsam.makeyourmorning.pages.main.compose.CircularTimerPicker
-import com.nochunsam.makeyourmorning.pages.main.compose.CountdownCircularTimer
+import com.nochunsam.makeyourmorning.pages.timer.compose.CircularTimerPicker
+import com.nochunsam.makeyourmorning.pages.timer.compose.CountdownCircularTimer
 import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
 import com.nochunsam.makeyourmorning.utilities.database.AppRepository
@@ -46,7 +46,7 @@ import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermissi
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("LaunchDuringComposition")
 @Composable
-fun MainScreen(onNavigateToSettings: () -> Unit) {
+fun Timer(onNavigateToSettings: () -> Unit) {
     // 필요 변수 선언
     val context = LocalContext.current
     var selectedMinutes by remember { mutableIntStateOf(10) }

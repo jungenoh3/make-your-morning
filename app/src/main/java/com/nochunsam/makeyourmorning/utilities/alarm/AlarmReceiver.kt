@@ -9,6 +9,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.nochunsam.makeyourmorning.R
+import com.nochunsam.makeyourmorning.pages.main.MainActivity
 import com.nochunsam.makeyourmorning.utilities.database.AppRepository
 import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermission
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ class AlarmReceiver: BroadcastReceiver() {
             return
         }
 
-        val mainIntent = Intent(context, com.nochunsam.makeyourmorning.pages.main.MainActivity::class.java).apply {
+        val mainIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 
