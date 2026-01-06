@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.nochunsam.makeyourmorning.pages.intro.screen.Intro
-import com.nochunsam.makeyourmorning.pages.timer.screen.Timer
+import com.nochunsam.makeyourmorning.pages.main.screen.MainScreen
 import com.nochunsam.makeyourmorning.pages.setting.screen.EmailLogin
 import com.nochunsam.makeyourmorning.pages.setting.screen.LoginOption
 import com.nochunsam.makeyourmorning.pages.setting.screen.Setting
@@ -33,7 +33,7 @@ fun NavigationGraph(
         }
 
         composable(route =  "main") {
-            Timer(
+            MainScreen (
                 onNavigateToSettings = {
                     navController.navigate("settings_graph")
                 }
