@@ -1,8 +1,13 @@
 package com.nochunsam.makeyourmorning.utilities.user
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +44,12 @@ class FirebaseViewModel: ViewModel() {
                 auth.signInWithEmailAndPassword(email, pass).await()
                 onSuccess()
             } catch (e: Exception) {
-                _errorMessage.value = "로그인 실패: ${e.message}"
+                // [서버 에러 매핑]
+                _errorMessage.value = when (e) {
+                    is FirebaseAuthInvalidUserException -> "존재하지 않는 계정입니다."
+                    is FirebaseAuthInvalidCredentialsException -> "이메일 형식이 잘못되었거나 비밀번호가 틀렸습니다."
+                    else -> "로그인 실패: ${e.localizedMessage}"
+                }
             } finally {
                 _isLoading.value = false
             }
@@ -47,6 +57,19 @@ class FirebaseViewModel: ViewModel() {
     }
 
     fun signUp(email: String, pass: String, name: String, onSuccess: () -> Unit) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _errorMessage.value = "올바른 이메일 형식이 아닙니다."
+            return
+        }
+        if (pass.length < 6) {
+            _errorMessage.value = "비밀번호는 최소 6자 이상이어야 합니다."
+            return
+        }
+        if (name.isBlank()) {
+            _errorMessage.value = "이름을 입력해주세요."
+            return
+        }
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -60,7 +83,12 @@ class FirebaseViewModel: ViewModel() {
 
                 onSuccess() // 화면 이동
             } catch (e: Exception) {
-                _errorMessage.value = "가입 실패: ${e.message}"
+                _errorMessage.value = when (e) {
+                    is FirebaseAuthWeakPasswordException -> "비밀번호가 너무 취약합니다."
+                    is FirebaseAuthInvalidCredentialsException -> "이메일 형식이 올바르지 않습니다."
+                    is FirebaseAuthUserCollisionException -> "이미 가입된 이메일 주소입니다."
+                    else -> "가입 실패: ${e.localizedMessage}"
+                }
             } finally {
                 _isLoading.value = false
             }

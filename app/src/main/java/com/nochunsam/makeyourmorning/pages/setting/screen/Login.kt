@@ -3,6 +3,7 @@ package com.nochunsam.makeyourmorning.pages.setting.screen
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -60,7 +61,7 @@ fun LoginOption(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailLogin(
-    viewModel: FirebaseViewModel, // 같은 그래프 내라면 공유 가능
+    viewModel: FirebaseViewModel,
     onLoginSuccess: () -> Unit,
     onNavigateToSignup: () -> Unit,
     onBack: () -> Unit
@@ -70,94 +71,173 @@ fun EmailLogin(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
-    // 에러 발생 시 토스트 메시지 등 처리
-    if (errorMessage != null) {
-        Text(text = errorMessage!!, color = Color.Red)
-    }
-
     CustomScaffold(
         title = "로그인",
-        onBack = onBack
-    ) {
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("이메일") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("비밀번호") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // 로그인 버튼
-            Button(
-                onClick = { viewModel.loginWithEmail(email, password, onLoginSuccess) },
-                enabled = !isLoading,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (isLoading) CircularProgressIndicator(color = Color.White)
-                else Text("로그인")
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // 회원가입 이동 버튼
-            TextButton(
-                onClick = onNavigateToSignup,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text("계정이 없으신가요? 회원가입")
-            }
+        onBack = {
+            viewModel.clearError()
+            onBack()
         }
+    ) {
+        TextField(
+            value = email,
+            onValueChange = {
+                email = it
+                viewModel.clearError() // 사용자가 수정하기 시작하면 에러 지움
+            },
+            label = { Text("이메일") },
+            modifier = Modifier.fillMaxWidth(),
+            isError = errorMessage != null // 에러가 있으면 빨간색 처리
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = password,
+            onValueChange = {
+                password = it
+                viewModel.clearError()
+            },
+            label = { Text("비밀번호") },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            isError = errorMessage != null
+        )
+
+        // 에러 메시지 표시 영역
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { viewModel.loginWithEmail(email, password, onLoginSuccess) },
+            enabled = !isLoading,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (isLoading) CircularProgressIndicator(color = Color.White)
+            else Text("로그인")
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        TextButton(
+            onClick = onNavigateToSignup,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text("계정이 없으신가요? 회원가입")
+        }
+    }
 }
 
 @Composable
 fun Signup(
     viewModel: FirebaseViewModel,
-    onSignupSuccess: () -> Unit, // 로그인 화면으로 이동
+    onSignupSuccess: () -> Unit,
     onBack: () -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
     val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    val isPasswordMatch = password == confirmPassword || confirmPassword.isEmpty()
 
     CustomScaffold(
         title = "회원가입",
-        onBack = onBack
+        onBack = {
+            viewModel.clearError() // 뒤로 갈 때 에러 지우기
+            onBack()
+        }
     ) {
-        TextField(value = name, onValueChange = { name = it }, label = { Text("이름") }, modifier = Modifier.fillMaxWidth())
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("이름") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = email, onValueChange = { email = it }, label = { Text("이메일") }, modifier = Modifier.fillMaxWidth())
+
+        TextField(
+            value = email,
+            onValueChange = {
+                email = it
+                viewModel.clearError() // 입력 수정 시 에러 초기화
+            },
+            label = { Text("이메일") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            isError = errorMessage?.contains("이메일") == true // 에러 메시지에 '이메일'이 포함되면 빨간줄
+        )
+
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = password, onValueChange = { password = it }, label = { Text("비밀번호") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+
+        TextField(
+            value = password,
+            onValueChange = {
+                password = it
+                viewModel.clearError()
+            },
+            label = { Text("비밀번호 (6자 이상)") },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            isError = errorMessage?.contains("비밀번호") == true
+        )
+
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = confirmPassword, onValueChange = { confirmPassword = it }, label = { Text("비밀번호 확인") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+
+        // 비밀번호 확인 필드
+        TextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("비밀번호 확인") },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            isError = !isPasswordMatch, // 불일치 시 에러 표시
+            supportingText = {
+                if (!isPasswordMatch) {
+                    Text("비밀번호가 일치하지 않습니다.", color = MaterialTheme.colorScheme.error)
+                }
+            }
+        )
+
+        // 전체적인 에러 메시지 (Firebase 에러 등)
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage!!,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 12.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                if (password == confirmPassword) {
-                    viewModel.signUp(email, password, name, onSignupSuccess)
-                } else {
-                    // 비밀번호 불일치 처리 (Toast 등)
-                }
+                if (!isPasswordMatch) return@Button
+                viewModel.signUp(email, password, name, onSignupSuccess)
             },
-            enabled = !isLoading,
+            enabled = !isLoading && isPasswordMatch && name.isNotEmpty() && email.isNotEmpty(),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("회원가입")
+            if(isLoading) CircularProgressIndicator(color = Color.White)
+            else Text("회원가입")
         }
-        TextButton(onClick = onBack) { Text("취소") }
+
+        TextButton(onClick = {
+            viewModel.clearError()
+            onBack()
+        }) { Text("취소") }
     }
 }
