@@ -46,7 +46,7 @@ import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermissi
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("LaunchDuringComposition")
 @Composable
-fun Timer(onNavigateToSettings: () -> Unit) {
+fun TimerScreen(onNavigateToSettings: () -> Unit) {
     // 필요 변수 선언
     val context = LocalContext.current
     var selectedMinutes by remember { mutableIntStateOf(10) }

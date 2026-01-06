@@ -17,7 +17,7 @@ import com.nochunsam.makeyourmorning.common.compose.ThirdPage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Tutorial(onBack: () -> Boolean) {
+fun TutorialScreen(onBack: () -> Boolean) {
     val pages: List<@Composable () -> Unit> = listOf(
         { FirstPage() },
         { SecondPage() },

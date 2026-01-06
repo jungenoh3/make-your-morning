@@ -5,13 +5,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.nochunsam.makeyourmorning.pages.intro.screen.Intro
+import com.nochunsam.makeyourmorning.pages.intro.screen.IntroScreen
 import com.nochunsam.makeyourmorning.pages.main.screen.MainScreen
-import com.nochunsam.makeyourmorning.pages.setting.screen.EmailLogin
-import com.nochunsam.makeyourmorning.pages.setting.screen.LoginOption
-import com.nochunsam.makeyourmorning.pages.setting.screen.Setting
-import com.nochunsam.makeyourmorning.pages.setting.screen.Signup
-import com.nochunsam.makeyourmorning.pages.setting.screen.Tutorial
+import com.nochunsam.makeyourmorning.pages.setting.screen.EmailLoginScreen
+import com.nochunsam.makeyourmorning.pages.setting.screen.LoginOptionScreen
+import com.nochunsam.makeyourmorning.pages.setting.screen.SettingScreen
+import com.nochunsam.makeyourmorning.pages.setting.screen.SignupScreen
+import com.nochunsam.makeyourmorning.pages.setting.screen.TutorialScreen
 import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
 
 @Composable
@@ -23,7 +23,7 @@ fun NavigationGraph(
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = "intro") {
-            Intro(navigateToMain = {
+            IntroScreen(navigateToMain = {
                 setFirstOpen()
 
                 navController.navigate("main") {
@@ -43,7 +43,7 @@ fun NavigationGraph(
             val firebaseViewModel = FirebaseViewModel()
 
             composable(route = "setting") {
-                Setting(
+                SettingScreen(
                     viewModel = firebaseViewModel,
                     onNavigateToTutorial = {
                         navController.navigate("tutorial")
@@ -57,14 +57,14 @@ fun NavigationGraph(
                 )
             }
             composable(route = "tutorial") {
-                Tutorial(onBack = {
+                TutorialScreen(onBack = {
                     navController.popBackStack()
                 })
             }
 
             navigation (startDestination = "login_options", route = "authentication") {
                 composable(route = "login_options") {
-                    LoginOption(
+                    LoginOptionScreen(
                         onBack = {
                             navController.popBackStack()
                         },
@@ -75,7 +75,7 @@ fun NavigationGraph(
                     )
                 }
                 composable (route = "email_login") {
-                    EmailLogin(
+                    EmailLoginScreen(
                         viewModel = firebaseViewModel,
                         onLoginSuccess = {
                             navController.navigate("setting") {
@@ -91,7 +91,7 @@ fun NavigationGraph(
                     )
                 }
                 composable (route = "signup") {
-                    Signup(
+                    SignupScreen(
                         viewModel = firebaseViewModel,
                         onSignupSuccess = {
                             navController.popBackStack()

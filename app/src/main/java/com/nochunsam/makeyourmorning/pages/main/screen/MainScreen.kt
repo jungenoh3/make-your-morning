@@ -3,8 +3,8 @@ package com.nochunsam.makeyourmorning.pages.main.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -21,7 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.nochunsam.makeyourmorning.pages.timer.screen.Timer
+import com.nochunsam.makeyourmorning.common.compose.CustomScaffold
+import com.nochunsam.makeyourmorning.pages.timer.screen.TimerScreen
 
 sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
     object Timer : BottomNavItem("timer_screen", "Timer", Icons.Default.Home)
@@ -41,7 +42,7 @@ fun MainScreen (
 
     Scaffold(
         bottomBar = {
-            NavigationBar { // Material 3 기준 (M2라면 BottomNavigation 사용)
+            NavigationBar {
                 val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
@@ -73,7 +74,7 @@ fun MainScreen (
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomNavItem.Timer.route) {
-                Timer(onNavigateToSettings = onNavigateToSettings)
+                TimerScreen(onNavigateToSettings = onNavigateToSettings)
             }
             composable(BottomNavItem.Record.route) {
                 RecordScreen()
@@ -84,7 +85,8 @@ fun MainScreen (
 
 @Composable
 fun RecordScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("기록 화면입니다")
-    }
+    CustomScaffold(
+        title = "레코드",
+        onBack = {}
+    ) { }
 }
