@@ -37,18 +37,6 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
                 }
             }
 
-            if (auth.currentUser == null) {
-                try {
-                    val result = auth.signInAnonymously().await()
-                    Log.d("SplashViewModel", "Guest Login Success: ${result.user?.uid}")
-                } catch (e: Exception) {
-                    Log.e("SplashViewModel", "Guest Login Failed", e)
-                    // 실패 시 처리는 기획에 따라 다름 (일단 진행하거나 재시도 등)
-                }
-            } else {
-                Log.d("Auth", "Already Logged in: ${auth.currentUser?.uid}")
-            }
-
             // 2. DataStore 체크 (비동기)
             val isFirst = prefDataStore.isFirstOpen.first() // 첫 값만 읽고 종료
 

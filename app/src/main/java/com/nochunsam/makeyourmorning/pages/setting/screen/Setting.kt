@@ -19,6 +19,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -26,19 +28,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nochunsam.makeyourmorning.common.compose.CustomColumn
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
+import androidx.compose.runtime.getValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Setting(
+    viewModel: FirebaseViewModel = viewModel(),
     onNavigateToTutorial: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     onBack: () -> Boolean
 ) {
+    val showLoginButton by viewModel.showLoginButton.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshLoginState()
+    }
+
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text("환경 설정") }, actions = {
-                IconButton(onClick = {
-                    onBack()
+            CenterAlignedTopAppBar(
+                title = { Text("환경 설정") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        onBack()
                 }) {
                     Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기 버튼")
                 }
@@ -50,6 +65,25 @@ fun Setting(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top
             ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            if (showLoginButton) {
+                                onNavigateToLogin()
+                            } else {
+                                viewModel.logout()
+                            }
+                        }
+                        .padding(vertical = 15.dp, horizontal = 20.dp)
+                ) {
+                    Text( if (showLoginButton) "로그인" else "로그아웃",
+                        fontSize = 15.sp)
+                }
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 1.dp
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

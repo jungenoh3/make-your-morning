@@ -41,6 +41,9 @@ fun NavigationGraph(
                     onNavigateToTutorial = {
                         navController.navigate("tutorial")
                     },
+                    onNavigateToLogin = {
+
+                    },
                     onBack = {
                         navController.popBackStack()
                     }
