@@ -13,7 +13,7 @@ import com.nochunsam.makeyourmorning.utilities.database.AppRepository
 fun RecordScreen() {
     val context = LocalContext.current
     val repository = remember { AppRepository(context.applicationContext as Application) }
-    val records = repository.getDayRecord().collectAsState(initial = null)
+    val records = repository.getEarliestRecordPerDay().collectAsState(initial = null)
 
     CustomColumn {
         Text(records.value.toString())

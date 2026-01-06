@@ -26,6 +26,15 @@ interface DayRecordDao {
     @Query("SELECT COUNT(*) FROM DayRecord")
     fun getRecordCount(): Flow<Int>
 
+    // 날짜에서 가장 이른 시간의 기록 가져오기
+    @Query("""
+        SELECT * FROM DayRecord 
+        GROUP BY strftime('%Y-%m-%d', date / 1000, 'unixepoch', 'localtime') 
+        HAVING MIN(date)
+        ORDER BY date DESC
+    """)
+    fun getEarliestRecordPerDay(): Flow<List<DayRecord>>
+
     // 기록 삭제
     @Query("DELETE FROM DayRecord WHERE id = :id")
     suspend fun deleteById(id: Int)
