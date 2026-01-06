@@ -28,14 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nochunsam.makeyourmorning.common.compose.CustomColumn
 import androidx.core.net.toUri
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
 import androidx.compose.runtime.getValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Setting(
-    viewModel: FirebaseViewModel = viewModel(),
+    viewModel: FirebaseViewModel,
     onNavigateToTutorial: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onBack: () -> Boolean
