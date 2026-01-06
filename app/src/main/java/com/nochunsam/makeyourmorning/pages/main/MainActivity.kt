@@ -15,14 +15,14 @@ import com.nochunsam.makeyourmorning.common.compose.NavigationGraph
 import com.nochunsam.makeyourmorning.ui.theme.MakeYourMorningTheme
 import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
-import com.nochunsam.makeyourmorning.utilities.pref.PrefViewModel
+import com.nochunsam.makeyourmorning.utilities.splash.SplashViewModel
 import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
     private var userLeaving = false
     private var backPressed = false
-    private val viewModel: PrefViewModel by viewModels()
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
