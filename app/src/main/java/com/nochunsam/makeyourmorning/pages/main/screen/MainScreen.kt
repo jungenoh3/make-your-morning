@@ -1,19 +1,20 @@
 package com.nochunsam.makeyourmorning.pages.main.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,7 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.nochunsam.makeyourmorning.common.compose.CustomScaffold
+import com.nochunsam.makeyourmorning.pages.record.screen.RecordScreen
 import com.nochunsam.makeyourmorning.pages.timer.screen.TimerScreen
 
 sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
@@ -29,6 +30,7 @@ sealed class BottomNavItem(val route: String, val title: String, val icon: Image
     object Record : BottomNavItem("record_screen", "Record", Icons.Default.List)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen (
     onNavigateToSettings: () -> Unit // Timer에서 설정으로 갈 때 사용
@@ -41,6 +43,19 @@ fun MainScreen (
     )
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("아침을 시작하세요!") },
+                actions = {
+                    IconButton(onClick = { onNavigateToSettings() }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = {
             NavigationBar {
                 val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
@@ -74,19 +89,11 @@ fun MainScreen (
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomNavItem.Timer.route) {
-                TimerScreen(onNavigateToSettings = onNavigateToSettings)
+                TimerScreen()
             }
             composable(BottomNavItem.Record.route) {
                 RecordScreen()
             }
         }
     }
-}
-
-@Composable
-fun RecordScreen() {
-    CustomScaffold(
-        title = "레코드",
-        onBack = {}
-    ) { }
 }

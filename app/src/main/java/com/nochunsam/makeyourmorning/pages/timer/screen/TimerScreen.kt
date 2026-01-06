@@ -12,14 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +40,7 @@ import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermissi
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("LaunchDuringComposition")
 @Composable
-fun TimerScreen(onNavigateToSettings: () -> Unit) {
+fun TimerScreen() {
     // 필요 변수 선언
     val context = LocalContext.current
     var selectedMinutes by remember { mutableIntStateOf(10) }
@@ -73,24 +67,8 @@ fun TimerScreen(onNavigateToSettings: () -> Unit) {
     }
 
     // 화면
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("아침을 시작하세요!") },
-                actions = {
-                    IconButton(onClick = { onNavigateToSettings() }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings"
-                        )
-                    }
-                }
-            )
-        }
-    ) {innerPadding ->
         Column (
-            modifier = Modifier.padding(innerPadding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -132,5 +110,4 @@ fun TimerScreen(onNavigateToSettings: () -> Unit) {
             }
         }
     }
-}
 
