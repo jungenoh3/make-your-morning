@@ -27,7 +27,7 @@ import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginOption(
+fun LoginOptionScreen (
     onNavigateToEmailLogin: () -> Unit,
     onBack: () -> Unit,
     onGoogleLoginClick: () -> Unit // 구글 로그인은 별도 설정 필요
@@ -60,7 +60,7 @@ fun LoginOption(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailLogin(
+fun EmailLoginScreen (
     viewModel: FirebaseViewModel,
     onLoginSuccess: () -> Unit,
     onNavigateToSignup: () -> Unit,
@@ -136,7 +136,7 @@ fun EmailLogin(
 }
 
 @Composable
-fun Signup(
+fun SignupScreen (
     viewModel: FirebaseViewModel,
     onSignupSuccess: () -> Unit,
     onBack: () -> Unit

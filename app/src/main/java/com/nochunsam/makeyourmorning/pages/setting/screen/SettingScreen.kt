@@ -33,7 +33,7 @@ import androidx.compose.runtime.getValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Setting(
+fun SettingScreen(
     viewModel: FirebaseViewModel,
     onNavigateToTutorial: () -> Unit,
     onNavigateToLogin: () -> Unit,

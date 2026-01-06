@@ -15,7 +15,7 @@ import com.nochunsam.makeyourmorning.common.compose.SecondPage
 import com.nochunsam.makeyourmorning.common.compose.ThirdPage
 
 @Composable
-fun Intro(navigateToMain: () -> Unit) {
+fun IntroScreen (navigateToMain: () -> Unit) {
     val pages: List<@Composable () -> Unit> = listOf(
         { FirstPage() },
         { SecondPage() },

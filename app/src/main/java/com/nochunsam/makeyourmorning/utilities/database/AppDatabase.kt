@@ -5,26 +5,27 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.nochunsam.makeyourmorning.common.data.DayCount
-import com.nochunsam.makeyourmorning.utilities.database.dao.DayCountDao
+import com.nochunsam.makeyourmorning.common.data.DayRecord
+import com.nochunsam.makeyourmorning.utilities.database.dao.DayRecordDao
 
 @TypeConverters(AppTypeConverter::class)
-@Database(entities = [DayCount::class], version = 1)
+@Database(entities = [DayRecord::class], version = 2)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun dayCountDao(): DayCountDao
+    abstract fun dayRecordDao(): DayRecordDao
 
     companion object {
         private var instance: AppDatabase? = null
         fun getInstance(context: Context): AppDatabase? {
-            if (instance == null) {
-                synchronized(AppDatabase::class) {
-                    instance = Room.databaseBuilder(context.applicationContext,
-                        AppDatabase::class.java, "appDB")
-                        .fallbackToDestructiveMigration(false)
-                        .build()
-                }
+            return instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "appDB"
+                )
+                    .fallbackToDestructiveMigration(true)
+                    .build()
+                    .also { instance = it }
             }
-            return instance
         }
     }
 }

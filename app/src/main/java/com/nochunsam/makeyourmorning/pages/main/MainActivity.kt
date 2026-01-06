@@ -1,23 +1,22 @@
 package com.nochunsam.makeyourmorning.pages.main
 
-import androidx.compose.runtime.getValue
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.nochunsam.makeyourmorning.common.data.BlockTime
 import com.nochunsam.makeyourmorning.common.compose.NavigationGraph
+import com.nochunsam.makeyourmorning.common.data.BlockTime
 import com.nochunsam.makeyourmorning.ui.theme.MakeYourMorningTheme
-import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
+import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.splash.SplashViewModel
 import kotlinx.coroutines.launch
-
 
 class MainActivity : ComponentActivity() {
     private var userLeaving = false

@@ -1,80 +1,48 @@
 package com.nochunsam.makeyourmorning.pages.main.screen
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Application
-import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.nochunsam.makeyourmorning.common.data.BlockTime
-import com.nochunsam.makeyourmorning.pages.main.compose.CircularTimerPicker
-import com.nochunsam.makeyourmorning.pages.main.compose.CountdownCircularTimer
-import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
-import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
-import com.nochunsam.makeyourmorning.utilities.database.AppRepository
-import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermission
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.nochunsam.makeyourmorning.pages.record.screen.RecordScreen
+import com.nochunsam.makeyourmorning.pages.timer.screen.TimerScreen
 
+sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
+    object Timer : BottomNavItem("timer_screen", "Timer", Icons.Default.Home)
+    object Record : BottomNavItem("record_screen", "Record", Icons.Default.List)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("LaunchDuringComposition")
 @Composable
-fun MainScreen(onNavigateToSettings: () -> Unit) {
-    // 필요 변수 선언
-    val context = LocalContext.current
-    var selectedMinutes by remember { mutableIntStateOf(10) }
-    val repository = remember { AppRepository(context.applicationContext as Application) }
+fun MainScreen (
+    onNavigateToSettings: () -> Unit // Timer에서 설정으로 갈 때 사용
+) {
+    val bottomNavController = rememberNavController()
 
-    val dayCount by repository.getDayCount().collectAsState(initial = null)
-    val isBlocking by FocusBlockingManager.isBlocking.collectAsState()
-
-    // 알림 권한 확인
-    var hasNotificationPermission by remember {
-        mutableStateOf(NotificationPermission.hasNotificationPermission(context))
-    }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            hasNotificationPermission = isGranted
-        }
+    val items = listOf(
+        BottomNavItem.Timer,
+        BottomNavItem.Record
     )
-    if (!hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        LaunchedEffect(Unit) {
-            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
 
-    // 화면
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("아침을 시작하세요!") },
@@ -87,50 +55,45 @@ fun MainScreen(onNavigateToSettings: () -> Unit) {
                     }
                 }
             )
-        }
-    ) {innerPadding ->
-        Column (
-            modifier = Modifier.padding(innerPadding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("총 ${dayCount?.count ?: 0}번 하루를 만들었어요!", fontSize = 18.sp)
+        },
+        bottomBar = {
+            NavigationBar {
+                val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
 
-            Text("이 시간동안 하루를 열 준비를 해봅시다!", fontSize = 20.sp)
-
-            if (isBlocking) {
-                CountdownCircularTimer()
-            } else {
-                CircularTimerPicker(
-                    initialMinutes = selectedMinutes,
-                    onTimeChange = { selectedMinutes = it }
-                )
+                items.forEach { item ->
+                    NavigationBarItem(
+                        icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+                        label = { Text(text = item.title) },
+                        selected = currentRoute == item.route,
+                        onClick = {
+                            bottomNavController.navigate(item.route) {
+                                // 1. 탭 클릭 시 백스택이 계속 쌓이는 것을 방지 (시작 지점까지 팝업)
+                                popUpTo(bottomNavController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // 2. 같은 탭을 여러 번 눌렀을 때 화면이 재생성되는 것 방지
+                                launchSingleTop = true
+                                // 3. 이전에 선택된 상태 복원
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
             }
-
-            if(isBlocking) {
-                Button(
-                    onClick = {
-                        FocusBlockingManager.currentBlockId?.let { AlarmScheduler(context).cancel(it) }
-                        FocusBlockingManager.stopBlocking()
-                    },
-                ) {
-                    Text("취소")
-                }
-            } else {
-                Button(
-                    onClick = {
-                        val blockTime = BlockTime(minute = selectedMinutes,)
-                        AlarmScheduler(context).scheduleBlock(blockTime)
-                        FocusBlockingManager.startBlockingFor(
-                            blockId = blockTime.id,
-                            minutes = selectedMinutes
-                        )
-                    },
-                ) {
-                    Text("시작")
-                }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = bottomNavController,
+            startDestination = BottomNavItem.Timer.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(BottomNavItem.Timer.route) {
+                TimerScreen()
+            }
+            composable(BottomNavItem.Record.route) {
+                RecordScreen()
             }
         }
     }
 }
-
