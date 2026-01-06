@@ -4,10 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.nochunsam.makeyourmorning.common.data.DayCount
-import com.nochunsam.makeyourmorning.utilities.database.AppDatabase
 import com.nochunsam.makeyourmorning.utilities.pref.PrefDataStore
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -26,15 +23,7 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
 
     init {
         viewModelScope.launch {
-            // 1. DB 초기화 로직 (IO 스레드 자동 처리)
-            launch(Dispatchers.IO) {
-                val dao = AppDatabase.Companion.getInstance(application)?.dayCountDao()
-                if (dao?.get() == null) {
-                    dao?.insert(DayCount(id = 1, count = 0))
-                }
-            }
-
-            // 2. DataStore 체크 (비동기)
+            // 1. DataStore 체크 (비동기)
             val isFirst = prefDataStore.isFirstOpen.first() // 첫 값만 읽고 종료
 
             Log.d("SplashViewModel", "isFirst: $isFirst")
@@ -43,7 +32,7 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
 
             Log.d("SplashViewModel", "startDestination: ${startDestination.value}")
 
-            // 3. 스플래시 해제
+            // 2. 스플래시 해제
             _isLoading.value = false
         }
     }

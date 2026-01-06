@@ -72,7 +72,7 @@ fun TimerScreen() {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("총 ${dayCount?.count ?: 0}번 하루를 만들었어요!", fontSize = 18.sp)
+            Text("총 ${dayCount ?: 0}번 하루를 만들었어요!", fontSize = 18.sp)
 
             Text("이 시간동안 하루를 열 준비를 해봅시다!", fontSize = 20.sp)
 

@@ -25,8 +25,9 @@ class AlarmReceiver: BroadcastReceiver() {
         Log.d("Debug", "알림을 받았습니다.")
 
         val repo = AppRepository(context.applicationContext as Application)
+        val minute = intent.getIntExtra("com.nochunsam.makeyourmorning.Minute", 0)
         CoroutineScope(Dispatchers.IO).launch {
-            repo.increaseDayCount()
+            repo.insertDayRecord(minute)
         }
         fireNotification(context)
     }

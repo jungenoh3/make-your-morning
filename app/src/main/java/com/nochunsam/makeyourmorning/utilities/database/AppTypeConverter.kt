@@ -1,20 +1,16 @@
 package com.nochunsam.makeyourmorning.utilities.database
 
 import androidx.room.TypeConverter
-import org.json.JSONArray
+import java.util.Date
 
 class AppTypeConverter {
     @TypeConverter
-    fun fromListIntToString(intList: List<Int>): String {
-        return JSONArray(intList).toString()
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
     }
+
     @TypeConverter
-    fun toListIntFromString(stringList: String): List<Int> {
-        val jsonArray = JSONArray(stringList)
-        val result = mutableListOf<Int>()
-        for (i in 0 until jsonArray.length()) {
-            result.add(jsonArray.getInt(i))
-        }
-        return result
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
     }
 }
