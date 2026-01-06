@@ -12,14 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.tasks.await
 
 
 class SplashViewModel(application: Application) : AndroidViewModel(application) {
 
     private val prefDataStore = PrefDataStore(application)
-    private val auth = FirebaseAuth.getInstance()
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
@@ -40,7 +37,7 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
             // 2. DataStore 체크 (비동기)
             val isFirst = prefDataStore.isFirstOpen.first() // 첫 값만 읽고 종료
 
-            Log.d("SplashViewModel", "isFirst: ${isFirst}")
+            Log.d("SplashViewModel", "isFirst: $isFirst")
 
             _startDestination.value = if (isFirst) "intro" else "main"
 
