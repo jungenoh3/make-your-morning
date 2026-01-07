@@ -1,5 +1,6 @@
 package com.nochunsam.makeyourmorning.common.compose
 
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,7 @@ import com.nochunsam.makeyourmorning.pages.setting.screen.LoginOptionScreen
 import com.nochunsam.makeyourmorning.pages.setting.screen.SettingScreen
 import com.nochunsam.makeyourmorning.pages.setting.screen.SignupScreen
 import com.nochunsam.makeyourmorning.pages.setting.screen.TutorialScreen
+import com.nochunsam.makeyourmorning.utilities.database.DatabaseViewModel
 import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
 
 @Composable
@@ -22,6 +24,7 @@ fun NavigationGraph(
     ){
     val navController = rememberNavController()
     val context = LocalContext.current
+    val databaseViewModel = DatabaseViewModel(context.applicationContext as Application)
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = "intro") {
@@ -46,7 +49,8 @@ fun NavigationGraph(
 
             composable(route = "setting") {
                 SettingScreen(
-                    viewModel = firebaseViewModel,
+                    firebaseViewModel = firebaseViewModel,
+                    databaseViewModel = databaseViewModel,
                     onNavigateToTutorial = {
                         navController.navigate("tutorial")
                     },

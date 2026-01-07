@@ -1,5 +1,6 @@
 package com.nochunsam.makeyourmorning.pages.setting.screen
 
+import android.app.Application
 import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,23 +40,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import com.nochunsam.makeyourmorning.utilities.database.DatabaseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
-    viewModel: FirebaseViewModel,
+    firebaseViewModel: FirebaseViewModel,
+    databaseViewModel: DatabaseViewModel,
     onNavigateToTutorial: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onBack: () -> Boolean
 ) {
-    val showLoginButton by viewModel.showLoginButton.collectAsState()
+    val context = LocalContext.current
+    val showLoginButton by firebaseViewModel.showLoginButton.collectAsState()
     var showLogoutDialog by remember { mutableStateOf(false) }
+    var showTruncateDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.refreshLoginState()
+        firebaseViewModel.refreshLoginState()
     }
-
-    val context = LocalContext.current
 
     if (showLogoutDialog) {
         AlertDialog(
@@ -66,7 +69,7 @@ fun SettingScreen(
                 TextButton(
                     onClick = {
                         // 4. 확인 클릭 시 실제 로그아웃 수행 및 다이얼로그 닫기
-                        viewModel.logout()
+                        firebaseViewModel.logout()
                         showLogoutDialog = false
                     }
                 ) {
@@ -76,6 +79,31 @@ fun SettingScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showLogoutDialog = false } // 취소 클릭 시 다이얼로그만 닫기
+                ) {
+                    Text("취소")
+                }
+            }
+        )
+    }
+
+    if (showTruncateDialog) {
+        AlertDialog(
+            onDismissRequest = { showTruncateDialog = false },
+            title = { Text(text = "데이터 전체 삭제") },
+            text = { Text(text = "정말 모든 데이터를 삭제하시겠습니까?\n이 행동은 되돌릴 수 없습니다.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        databaseViewModel.clearAllData()
+                        showTruncateDialog = false
+                    }
+                ) {
+                    Text("확인")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showTruncateDialog = false } // 취소 클릭 시 다이얼로그만 닫기
                 ) {
                     Text("취소")
                 }
@@ -110,7 +138,7 @@ fun SettingScreen(
                 ) {
                     Icon(imageVector = Icons.Default.Person, contentDescription = "사용자 아이콘")
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text( if (showLoginButton) "비회원" else viewModel.getUserName(),
+                    Text( if (showLoginButton) "비회원" else firebaseViewModel.getUserName(),
                         fontSize = 20.sp)
                 }
                 Divider(
@@ -172,6 +200,20 @@ fun SettingScreen(
                         .padding(vertical = 15.dp, horizontal = 20.dp)
                 ) {
                     Text("문의", fontSize = 15.sp)
+                }
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 1.dp
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            showTruncateDialog = true
+                        }
+                        .padding(vertical = 15.dp, horizontal = 20.dp)
+                ) {
+                    Text("데이터 전체 삭제", fontSize = 15.sp, color = Color.Red)
                 }
                 Divider(
                     color = Color.LightGray,

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.nochunsam.makeyourmorning.common.data.DayRecord
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -38,4 +39,18 @@ interface DayRecordDao {
     // 기록 삭제
     @Query("DELETE FROM DayRecord WHERE id = :id")
     suspend fun deleteById(id: Int)
+
+    // 모든 기록 삭제
+    @Query("DELETE FROM DayRecord")
+    suspend fun deleteAll()
+
+    // ID 초기화
+    @Query("DELETE FROM sqlite_sequence WHERE name = 'DayRecord'")
+    suspend fun resetIdCounter()
+
+    @Transaction
+    suspend fun truncateTable() {
+        deleteAll()
+        resetIdCounter()
+    }
 }

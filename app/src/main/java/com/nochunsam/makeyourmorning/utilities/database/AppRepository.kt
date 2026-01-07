@@ -25,4 +25,7 @@ class AppRepository(application: Application) {
         )
         dayRecordDao.insert(record)
     }
+    suspend fun truncateTable() {
+        dayRecordDao.truncateTable()
+    }
 }
