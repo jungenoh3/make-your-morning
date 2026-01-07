@@ -38,15 +38,15 @@ fun LoginOptionScreen (
     ) {
 
             // 구글 로그인 버튼
-            //        Button(
-            //            onClick = onGoogleLoginClick,
-            //            modifier = Modifier.fillMaxWidth(),
-            //            colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-            //        ) {
-            //            Text("Google로 계속하기", color = Color.Black)
-            //        }
-            //
-            //        Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = onGoogleLoginClick,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
+                Text("Google로 계속하기", color = Color.Black)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // 이메일 로그인 버튼
             Button(
