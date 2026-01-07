@@ -5,13 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,6 +33,7 @@ import com.nochunsam.makeyourmorning.common.compose.CustomColumn
 import androidx.core.net.toUri
 import com.nochunsam.makeyourmorning.utilities.user.FirebaseViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +68,22 @@ fun SettingScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top
             ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 20.dp, horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(imageVector = Icons.Default.Person, contentDescription = "사용자 아이콘")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text( if (showLoginButton) "비회원" else viewModel.getUserName(),
+                        fontSize = 20.sp)
+                }
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 1.dp
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

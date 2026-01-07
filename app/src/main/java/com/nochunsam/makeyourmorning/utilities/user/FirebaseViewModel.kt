@@ -42,6 +42,10 @@ class FirebaseViewModel: ViewModel() {
         return user == null || user.isAnonymous
     }
 
+    fun getUserName(): String {
+        return auth.currentUser?.displayName.toString()
+    }
+
     fun loginWithEmail(email: String, pass: String, onSuccess: () -> Unit) {
         if (email.isBlank() || pass.isBlank()) {
             _errorMessage.value = "이메일과 비밀번호를 입력해주세요."
