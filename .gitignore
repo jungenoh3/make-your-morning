@@ -4,6 +4,8 @@
 *.iml
 **/*.iml
 .vscode/
+**/api.http
+serviceAccountKey.json
 
 .gradle/
 **/.gradle/

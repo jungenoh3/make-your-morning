@@ -2,6 +2,7 @@ package com.nochunsam.makeyourmorning_server.day_record.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class DayRecordController {
     }
 
     @GetMapping("/user")
-    public List<DayRecord> getDayRecordsByUserId(String userId) {
+    public List<DayRecord> getDayRecordsByUserId(@AuthenticationPrincipal String userId) {
         return dayRecordService.getDayRecordsByUserId(userId);
     }
 
