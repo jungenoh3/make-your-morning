@@ -195,7 +195,8 @@ private fun DrawScope.drawRecordBar(
     textMeasurer: TextMeasurer,
     barColor: Color
 ) {
-    val calendar = Calendar.getInstance().apply { time = record.date }
+    val kstTimeZone = TimeZone.getTimeZone("Asia/Seoul")
+    val calendar = Calendar.getInstance(kstTimeZone).apply { time = record.date }
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
 
@@ -216,7 +217,9 @@ private fun DrawScope.drawRecordBar(
         cornerRadius = CornerRadius(4.dp.toPx())
     )
 
-    val dateFormat = SimpleDateFormat("yy/MM/dd\nhh:mm", Locale.KOREA)
+    val dateFormat = SimpleDateFormat("yy/MM/dd\nhh:mm", Locale.KOREA).apply {
+        timeZone = kstTimeZone
+    }
     val dateText = dateFormat.format(record.date)
 
     val textLayoutResult = textMeasurer.measure(
