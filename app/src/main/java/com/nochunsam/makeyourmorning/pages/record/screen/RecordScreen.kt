@@ -22,7 +22,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nochunsam.makeyourmorning.common.compose.CustomColumn
@@ -35,46 +34,6 @@ import java.util.*
 private const val MIN_HOUR = 4  // 오전 4시
 private const val MAX_HOUR = 14 // 오후 2시 (14시)
 private const val TOTAL_MINUTES_RANGE = (MAX_HOUR - MIN_HOUR) * 60f
-
-fun createMockDate(dayOffset: Int, hour: Int, minute: Int): Date {
-    val calendar = Calendar.getInstance()
-    calendar.add(Calendar.DAY_OF_YEAR, -dayOffset) // dayOffset일 전으로 이동
-    calendar.set(Calendar.HOUR_OF_DAY, hour)
-    calendar.set(Calendar.MINUTE, minute)
-    calendar.set(Calendar.SECOND, 0)
-    return calendar.time
-}
-
-// 2. 임시 데이터 20개 리스트
-val mockRecords = listOf(
-    // 최근 (0일 전 ~ )
-    DayRecord(id = 1, date = createMockDate(0, 7, 10), minute = 45),  // 오늘: 07:10 시작, 45분간
-    DayRecord(id = 2, date = createMockDate(1, 6, 30), minute = 30),  // 어제: 06:30 시작, 30분간
-    DayRecord(id = 3, date = createMockDate(2, 8, 0), minute = 20),   // 2일전: 08:00 시작 (조금 늦음)
-    DayRecord(id = 4, date = createMockDate(3, 6, 15), minute = 50),  // 얼리버드
-    DayRecord(id = 5, date = createMockDate(4, 7, 45), minute = 15),  // 짧게 함
-
-    // 5~9일 전
-    DayRecord(id = 6, date = createMockDate(5, 5, 50), minute = 60),  // 05:50 시작, 1시간 풀타임
-    DayRecord(id = 7, date = createMockDate(6, 9, 30), minute = 10),  // 09:30 늦잠
-    DayRecord(id = 8, date = createMockDate(7, 7, 0), minute = 40),
-    DayRecord(id = 9, date = createMockDate(8, 6, 45), minute = 35),
-    DayRecord(id = 10, date = createMockDate(9, 13, 0), minute = 25), // 오후 1시 (늦게 함)
-
-    // 10~14일 전
-    DayRecord(id = 11, date = createMockDate(10, 4, 30), minute = 55), // 새벽 4시 반 (가장 빠름)
-    DayRecord(id = 12, date = createMockDate(11, 7, 20), minute = 30),
-    DayRecord(id = 13, date = createMockDate(12, 8, 10), minute = 45),
-    DayRecord(id = 14, date = createMockDate(13, 7, 5), minute = 20),
-    DayRecord(id = 15, date = createMockDate(14, 6, 0), minute = 60),
-
-    // 15~19일 전
-    DayRecord(id = 16, date = createMockDate(15, 10, 0), minute = 15), // 10시
-    DayRecord(id = 17, date = createMockDate(16, 7, 30), minute = 40),
-    DayRecord(id = 18, date = createMockDate(17, 6, 50), minute = 35),
-    DayRecord(id = 19, date = createMockDate(18, 5, 40), minute = 50),
-    DayRecord(id = 20, date = createMockDate(19, 8, 30), minute = 25)
-)
 
 @Composable
 fun RecordScreen() {
@@ -195,7 +154,8 @@ private fun DrawScope.drawRecordBar(
     textMeasurer: TextMeasurer,
     barColor: Color
 ) {
-    val calendar = Calendar.getInstance().apply { time = record.date }
+    val kstTimeZone = TimeZone.getTimeZone("Asia/Seoul")
+    val calendar = Calendar.getInstance(kstTimeZone).apply { time = record.date }
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
 
@@ -216,7 +176,9 @@ private fun DrawScope.drawRecordBar(
         cornerRadius = CornerRadius(4.dp.toPx())
     )
 
-    val dateFormat = SimpleDateFormat("yy/MM/dd\nhh:mm", Locale.KOREA)
+    val dateFormat = SimpleDateFormat("yy/MM/dd\nhh:mm", Locale.KOREA).apply {
+        timeZone = kstTimeZone
+    }
     val dateText = dateFormat.format(record.date)
 
     val textLayoutResult = textMeasurer.measure(

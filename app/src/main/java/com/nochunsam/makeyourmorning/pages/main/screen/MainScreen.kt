@@ -1,12 +1,11 @@
 package com.nochunsam.makeyourmorning.pages.main.screen
 
+import com.nochunsam.makeyourmorning.R
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,7 +15,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,9 +24,9 @@ import androidx.navigation.compose.rememberNavController
 import com.nochunsam.makeyourmorning.pages.record.screen.RecordScreen
 import com.nochunsam.makeyourmorning.pages.timer.screen.TimerScreen
 
-sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
-    object Timer : BottomNavItem("timer_screen", "Timer", Icons.Default.Home)
-    object Record : BottomNavItem("record_screen", "Record", Icons.Default.List)
+sealed class BottomNavItem(val route: String, val title: String, val icon: Int) {
+    object Timer : BottomNavItem("timer_screen", "타이머", R.drawable.baseline_av_timer_24)
+    object Record : BottomNavItem("record_screen", "기록", R.drawable.baseline_format_list_bulleted_24)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +62,7 @@ fun MainScreen (
 
                 items.forEach { item ->
                     NavigationBarItem(
-                        icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+                        icon = { Icon(painter = painterResource(id = item.icon), contentDescription = item.title) },
                         label = { Text(text = item.title) },
                         selected = currentRoute == item.route,
                         onClick = {

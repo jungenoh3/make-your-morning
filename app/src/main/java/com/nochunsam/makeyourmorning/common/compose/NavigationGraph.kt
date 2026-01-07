@@ -1,6 +1,7 @@
 package com.nochunsam.makeyourmorning.common.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -20,6 +21,7 @@ fun NavigationGraph(
     setFirstOpen: () -> Unit
     ){
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = "intro") {
@@ -71,7 +73,14 @@ fun NavigationGraph(
                         onNavigateToEmailLogin = {
                             navController.navigate("email_login")
                         },
-                        onGoogleLoginClick = {},
+                        onGoogleLoginClick = {
+                            firebaseViewModel.loginInWithGoogle(
+                                context = context,
+                                onSuccess = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        },
                     )
                 }
                 composable (route = "email_login") {
