@@ -3,6 +3,7 @@
 **/.idea/
 *.iml
 **/*.iml
+.vscode/
 
 .gradle/
 **/.gradle/

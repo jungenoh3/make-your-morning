@@ -1,4 +1,4 @@
-package com.nochunsam.makeyourmorning_server.controller.test;
+package com.nochunsam.makeyourmorning_server.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
