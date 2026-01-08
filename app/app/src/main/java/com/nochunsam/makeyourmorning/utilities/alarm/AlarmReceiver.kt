@@ -1,6 +1,5 @@
 package com.nochunsam.makeyourmorning.utilities.alarm
 
-import android.app.Application
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -10,7 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.nochunsam.makeyourmorning.R
 import com.nochunsam.makeyourmorning.pages.main.MainActivity
-import com.nochunsam.makeyourmorning.utilities.database.AppRepository
+import com.nochunsam.makeyourmorning.utilities.MYMApplication
 import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermission
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,9 @@ class AlarmReceiver: BroadcastReceiver() {
 
         Log.d("Debug", "알림을 받았습니다.")
 
-        val repo = AppRepository(context.applicationContext as Application)
+        val app = context.applicationContext as MYMApplication
+        val repo = app.repository
+
         val minute = intent.getIntExtra("com.nochunsam.makeyourmorning.Minute", 0)
         CoroutineScope(Dispatchers.IO).launch {
             repo.insertDayRecord(minute)

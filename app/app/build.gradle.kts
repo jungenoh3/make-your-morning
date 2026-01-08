@@ -33,6 +33,7 @@ android {
             useSupportLibrary = true
         }
         buildConfigField("String", "WEB_CLIENT_ID", "\"${localProperties.getProperty("WEB_CLIENT_ID") ?: ""}\"")
+        buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("BASE_URL") ?: ""}\"")
     }
 
     buildTypes {
@@ -67,6 +68,11 @@ android {
 }
 
 dependencies {
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.google.code.gson:gson:2.8.5")
+    implementation ("com.squareup.retrofit2:converter-gson:2.6.4")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")

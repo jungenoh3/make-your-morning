@@ -2,7 +2,6 @@ package com.nochunsam.makeyourmorning.pages.timer.screen
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Application
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,20 +32,21 @@ import com.nochunsam.makeyourmorning.pages.timer.compose.CircularTimerPicker
 import com.nochunsam.makeyourmorning.pages.timer.compose.CountdownCircularTimer
 import com.nochunsam.makeyourmorning.utilities.block.FocusBlockingManager
 import com.nochunsam.makeyourmorning.utilities.alarm.AlarmScheduler
-import com.nochunsam.makeyourmorning.utilities.database.AppRepository
+import com.nochunsam.makeyourmorning.utilities.database.DatabaseViewModel
 import com.nochunsam.makeyourmorning.utilities.notification.NotificationPermission
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("LaunchDuringComposition")
 @Composable
-fun TimerScreen() {
+fun TimerScreen(
+    databaseViewModel: DatabaseViewModel
+) {
     // 필요 변수 선언
     val context = LocalContext.current
     var selectedMinutes by remember { mutableIntStateOf(10) }
-    val repository = remember { AppRepository(context.applicationContext as Application) }
 
-    val dayCount by repository.getDayCount().collectAsState(initial = null)
+    val dayCount by databaseViewModel.dayCount.collectAsState()
     val isBlocking by FocusBlockingManager.isBlocking.collectAsState()
 
     // 알림 권한 확인
@@ -72,7 +72,7 @@ fun TimerScreen() {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("총 ${dayCount ?: 0}번 하루를 만들었어요!", fontSize = 18.sp)
+            Text("총 ${dayCount}번 하루를 만들었어요!", fontSize = 18.sp)
 
             Text("이 시간동안 하루를 열 준비를 해봅시다!", fontSize = 20.sp)
 
