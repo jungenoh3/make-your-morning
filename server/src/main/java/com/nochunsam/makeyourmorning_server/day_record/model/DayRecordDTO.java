@@ -1,15 +1,15 @@
 package com.nochunsam.makeyourmorning_server.day_record.model;
 
-import java.sql.Date;
+import java.time.OffsetDateTime;
 
 public class DayRecordDTO {
-    private Date date;
+    private OffsetDateTime date;
     private Long minute;
 
-    public Date getDate() {
+    public OffsetDateTime getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(OffsetDateTime date) {
         this.date = date;
     }
     public Long getMinute() {

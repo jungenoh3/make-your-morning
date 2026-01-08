@@ -1,7 +1,7 @@
 package com.nochunsam.makeyourmorning_server.day_record.model;
 
-import java.sql.Date;
 import java.util.UUID;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +19,9 @@ public class DayRecord {
     private UUID uuid;
 
     private String userId;
-    private Date date;
+
+    @Column(columnDefinition = "DATETIME(6)") 
+    private OffsetDateTime date;
     private Long minute;
 
     public Long getId() {
@@ -46,11 +48,11 @@ public class DayRecord {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public OffsetDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(OffsetDateTime date) {
         this.date = date;
     }
 
@@ -65,14 +67,14 @@ public class DayRecord {
     DayRecord() {
     }
 
-    public DayRecord(String userId, Date date, Long minute) {
+    public DayRecord(String userId, OffsetDateTime date, Long minute) {
         this.uuid = UUID.randomUUID();
         this.userId = userId;
         this.date = date;
         this.minute = minute;
     }
 
-    public DayRecord(UUID uuid, String userId, Date date, Long minute) {
+    public DayRecord(UUID uuid, String userId, OffsetDateTime date, Long minute) {
         this.uuid = uuid;
         this.userId = userId;
         this.date = date;
