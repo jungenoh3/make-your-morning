@@ -33,8 +33,8 @@ public class DayRecordController {
     }
 
     @PostMapping("/create")
-    public DayRecord createDayRecord(@RequestBody DayRecordDTO dayRecordDTO) {
-        DayRecord dayRecord = new DayRecord(dayRecordDTO.getUserId(), dayRecordDTO.getDate(), dayRecordDTO.getMinute());
+    public DayRecord createDayRecord(@RequestBody DayRecordDTO dayRecordDTO, @AuthenticationPrincipal String userId) {
+        DayRecord dayRecord = new DayRecord(userId, dayRecordDTO.getDate(), dayRecordDTO.getMinute());
         return dayRecordService.save(dayRecord);
     }
 }
