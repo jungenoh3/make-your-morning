@@ -1,6 +1,5 @@
 package com.nochunsam.makeyourmorning.pages.record.screen
 
-import android.app.Application
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -26,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nochunsam.makeyourmorning.common.compose.CustomColumn
 import com.nochunsam.makeyourmorning.common.data.DayRecord
-import com.nochunsam.makeyourmorning.utilities.database.AppRepository
+import com.nochunsam.makeyourmorning.utilities.database.DatabaseViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,12 +34,10 @@ private const val MAX_HOUR = 14 // 오후 2시 (14시)
 private const val TOTAL_MINUTES_RANGE = (MAX_HOUR - MIN_HOUR) * 60f
 
 @Composable
-fun RecordScreen() {
-    val context = LocalContext.current
-    val repository = remember { AppRepository(context.applicationContext as Application) }
-
-    // DB에서 데이터 구독
-    val recordsState by repository.getEarliestRecordPerDay().collectAsState(initial = emptyList())
+fun RecordScreen(
+    databaseViewModel: DatabaseViewModel
+) {
+    val recordsState by databaseViewModel.earliestRecords.collectAsState()
 
     CustomColumn (
         paddingValues = PaddingValues(15.dp)

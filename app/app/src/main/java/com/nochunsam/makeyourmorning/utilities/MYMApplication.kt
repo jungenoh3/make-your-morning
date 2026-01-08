@@ -4,10 +4,13 @@ import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.os.Build
+import com.nochunsam.makeyourmorning.utilities.database.AppDatabase
+import com.nochunsam.makeyourmorning.utilities.database.AppRepository
 
-class AppInitializer: Application() {
+class MYMApplication: Application() {
+    private val database by lazy { AppDatabase.getInstance(this)!! }
+    val repository by lazy { AppRepository(database.dayRecordDao()) }
 
     override fun onCreate() {
         super.onCreate()

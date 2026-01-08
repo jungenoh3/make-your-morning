@@ -23,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nochunsam.makeyourmorning.pages.record.screen.RecordScreen
 import com.nochunsam.makeyourmorning.pages.timer.screen.TimerScreen
+import com.nochunsam.makeyourmorning.utilities.database.DatabaseViewModel
 
 sealed class BottomNavItem(val route: String, val title: String, val icon: Int) {
     object Timer : BottomNavItem("timer_screen", "타이머", R.drawable.baseline_av_timer_24)
@@ -32,6 +33,7 @@ sealed class BottomNavItem(val route: String, val title: String, val icon: Int) 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen (
+    databaseViewModel: DatabaseViewModel,
     onNavigateToSettings: () -> Unit // Timer에서 설정으로 갈 때 사용
 ) {
     val bottomNavController = rememberNavController()
@@ -88,10 +90,14 @@ fun MainScreen (
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomNavItem.Timer.route) {
-                TimerScreen()
+                TimerScreen(
+                    databaseViewModel = databaseViewModel
+                )
             }
             composable(BottomNavItem.Record.route) {
-                RecordScreen()
+                RecordScreen(
+                    databaseViewModel = databaseViewModel
+                )
             }
         }
     }
