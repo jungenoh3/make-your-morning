@@ -19,7 +19,7 @@ public class FirebaseConfig {
         if (serviceAccount == null) {
             throw new FileNotFoundException("Service account file not found");
         }
-        FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+        FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
         FirebaseApp.initializeApp(options);
       }
     } catch (Exception e) {
