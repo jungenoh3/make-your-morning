@@ -172,7 +172,7 @@ private fun DrawScope.drawRecordBar(
         cornerRadius = CornerRadius(4.dp.toPx())
     )
 
-    val dateFormat = SimpleDateFormat("yy/MM/dd\nhh:mm", Locale.KOREA).apply {
+    val dateFormat = SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).apply {
         timeZone = kstTimeZone
     }
     val dateText = dateFormat.format(record.date)
